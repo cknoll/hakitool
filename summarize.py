@@ -12,6 +12,11 @@ with open("out.txt") as fp:
     input_lines = fp.readlines()
 
 
+
+# TODO-AIDER: currently the client is only asked for the first part of the overall data.
+# please iterate over the following parts
+# each result should be stored in a text file
+# the prompt should contain the summary of previous parts
 dl = 100
 idx_start = 0
 part1 = "\n".join(input_lines[idx_start : idx_start + dl])
