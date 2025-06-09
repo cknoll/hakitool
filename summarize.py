@@ -13,23 +13,39 @@ with open("out.txt") as fp:
 
 
 
-# TODO-AIDER: currently the client is only asked for the first part of the overall data.
-# please iterate over the following parts
-# each result should be stored in a text file
-# the prompt should contain the summary of previous parts
 dl = 100
-idx_start = 0
-part1 = "\n".join(input_lines[idx_start : idx_start + dl])
+previous_summaries = []
 
-response = client.chat.completions.create(
-    model="gemma3:27b",
-    messages=[
-        {"role": "user", "content": f"Please summarize the following partial transcript of a german podcast:\n{part1}"}
-    ],
-    # tools=tools,
-    seed = 1900,
-)
-
-print(response.choices[0].message.content)
+for part_num in range(0, len(input_lines), dl):
+    idx_start = part_num
+    idx_end = min(idx_start + dl, len(input_lines))
+    current_part = "\n".join(input_lines[idx_start:idx_end])
+    
+    # Build prompt with previous summaries context
+    if previous_summaries:
+        context = "Previous summaries:\n" + "\n".join(previous_summaries) + "\n\n"
+        prompt = f"{context}Please summarize the following partial transcript of a german podcast:\n{current_part}"
+    else:
+        prompt = f"Please summarize the following partial transcript of a german podcast:\n{current_part}"
+    
+    response = client.chat.completions.create(
+        model="gemma3:27b",
+        messages=[
+            {"role": "user", "content": prompt}
+        ],
+        # tools=tools,
+        seed = 1900,
+    )
+    
+    summary = response.choices[0].message.content
+    previous_summaries.append(summary)
+    
+    # Store result in text file
+    part_index = part_num // dl
+    filename = f"summary_part_{part_index:03d}.txt"
+    with open(filename, "w", encoding="utf-8") as f:
+        f.write(summary)
+    
+    print(f"Part {part_index} summarized and saved to {filename}")
 
 IPS()
