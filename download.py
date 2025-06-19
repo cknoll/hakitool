@@ -2,6 +2,7 @@ import os
 import json
 import re
 import requests
+from datetime import datetime
 from youtube_transcript_api import YouTubeTranscriptApi
 
 from ipydex import IPS, activate_ips_on_exception
@@ -18,17 +19,38 @@ def slugify(text):
     # Remove leading/trailing hyphens and convert to lowercase
     return text.strip('-').lower()
 
-def get_video_title(video_id):
-    """Get video title from YouTube using oembed API"""
+def get_video_info(video_id):
+    """Get video title and publish date from YouTube using oembed API"""
     try:
         url = f"https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v={video_id}&format=json"
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            return data.get('title', video_id)
+            title = data.get('title', video_id)
+            
+            # Try to get publish date from RSS feed as oembed doesn't provide it
+            rss_url = f"https://www.youtube.com/feeds/videos.xml?channel_id={video_id}"
+            try:
+                # Alternative: scrape the video page for publish date
+                video_page_url = f"https://www.youtube.com/watch?v={video_id}"
+                page_response = requests.get(video_page_url)
+                if page_response.status_code == 200:
+                    # Look for uploadDate in JSON-LD structured data
+                    import re
+                    json_ld_match = re.search(r'"uploadDate":"([^"]+)"', page_response.text)
+                    if json_ld_match:
+                        upload_date_str = json_ld_match.group(1)
+                        # Parse ISO format date and extract just the date part
+                        upload_date = datetime.fromisoformat(upload_date_str.replace('Z', '+00:00'))
+                        publish_date = upload_date.strftime('%Y-%m-%d')
+                        return title, publish_date
+            except Exception:
+                pass
+            
+            return title, None
     except Exception as e:
-        print(f"Could not fetch video title: {e}")
-    return video_id
+        print(f"Could not fetch video info: {e}")
+    return video_id, None
 
 def download_german_subtitles(video_url):
     # Extract video ID from URL
@@ -38,9 +60,16 @@ def download_german_subtitles(video_url):
     os.makedirs('./output', exist_ok=True)
     os.makedirs('./output/fulltext', exist_ok=True)
 
-    # Get video title and create slugified filename
-    video_title = get_video_title(video_id)
+    # Get video title and publish date, create slugified filename
+    video_title, publish_date = get_video_info(video_id)
     slugified_title = slugify(video_title)
+    
+    # Prepend publish date to filename if available
+    if publish_date:
+        filename_prefix = f"{publish_date}_{slugified_title}"
+    else:
+        filename_prefix = slugified_title
+        print("Warning: Could not fetch publish date, using title only")
 
     api = YouTubeTranscriptApi()
     q, = api.list(video_id)
@@ -55,12 +84,13 @@ def download_german_subtitles(video_url):
         transcript_obj = yt_ts_api.fetch(video_id, languages=["de"])
 
         # Save to JSON file with timestamps
-        json_fpath = f'./output/{slugified_title}_german_subtitles.json'
-        fulltext_fpath = f'./output/fulltext/{slugified_title}_german_subtitles.txt'
+        json_fpath = f'./output/{filename_prefix}_german_subtitles.json'
+        fulltext_fpath = f'./output/fulltext/{filename_prefix}_german_subtitles.txt'
         result_dict = {
             "video_id": video_id,
             "video_title": video_title,
             "video_url": video_url,
+            "publish_date": publish_date,
             "language": "de",
             "transcript_snippets": transcript_obj.to_raw_data(),
         }
