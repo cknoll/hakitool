@@ -33,23 +33,24 @@ def get_video_title(video_id):
 def download_german_subtitles(video_url):
     # Extract video ID from URL
     video_id = video_url.split('v=')[1].split('&')[0]
-    
+
     # Create output directory if it doesn't exist
     os.makedirs('./output', exist_ok=True)
-    
+
     # Get video title and create slugified filename
     video_title = get_video_title(video_id)
     slugified_title = slugify(video_title)
-    
+
     api = YouTubeTranscriptApi()
     q, = api.list(video_id)
     q.fetch()
 
     try:
         # Try to fetch German (language code 'de') subtitles
-        # IPS()
-        transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=["de"])
-        
+        IPS()
+        yt_ts_api = YouTubeTranscriptApi()
+        transcript_obj = yt_ts_api.fetch(video_id, languages=["de"])
+
         # Save to JSON file with timestamps
         json_filename = f'./output/{slugified_title}_german_subtitles.json'
         with open(json_filename, 'w', encoding='utf-8') as f:
@@ -58,12 +59,12 @@ def download_german_subtitles(video_url):
                 'video_title': video_title,
                 'video_url': video_url,
                 'language': 'de',
-                'transcript': transcript
+                'transcript_snippets': transcript_obj.to_raw_data()
             }, f, ensure_ascii=False, indent=2)
-        
+
         print(f"German subtitles saved to {json_filename}")
         print(f"Video title: {video_title}")
-        
+
     except Exception as e:
         print(f"Could not download German subtitles: {e}")
 
