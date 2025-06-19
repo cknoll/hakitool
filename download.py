@@ -36,6 +36,7 @@ def download_german_subtitles(video_url):
 
     # Create output directory if it doesn't exist
     os.makedirs('./output', exist_ok=True)
+    os.makedirs('./output/fulltext', exist_ok=True)
 
     # Get video title and create slugified filename
     video_title = get_video_title(video_id)
@@ -45,24 +46,34 @@ def download_german_subtitles(video_url):
     q, = api.list(video_id)
     q.fetch()
 
+    fulltext_lines  = []
+
     try:
         # Try to fetch German (language code 'de') subtitles
-        IPS()
+        # IPS()
         yt_ts_api = YouTubeTranscriptApi()
         transcript_obj = yt_ts_api.fetch(video_id, languages=["de"])
 
         # Save to JSON file with timestamps
-        json_filename = f'./output/{slugified_title}_german_subtitles.json'
-        with open(json_filename, 'w', encoding='utf-8') as f:
-            json.dump({
-                'video_id': video_id,
-                'video_title': video_title,
-                'video_url': video_url,
-                'language': 'de',
-                'transcript_snippets': transcript_obj.to_raw_data()
-            }, f, ensure_ascii=False, indent=2)
+        json_fpath = f'./output/{slugified_title}_german_subtitles.json'
+        fulltext_fpath = f'./output/fulltext/{slugified_title}_german_subtitles.txt'
+        result_dict = {
+            "video_id": video_id,
+            "video_title": video_title,
+            "video_url": video_url,
+            "language": "de",
+            "transcript_snippets": transcript_obj.to_raw_data(),
+        }
+        with open(json_fpath, 'w', encoding='utf-8') as fp:
+            json.dump(result_dict, fp, ensure_ascii=False, indent=2)
 
-        print(f"German subtitles saved to {json_filename}")
+        for snippet in result_dict["transcript_snippets"]:
+            fulltext_lines.append(f"{snippet["text"]}\n")
+
+        with open(fulltext_fpath, 'w', encoding='utf-8') as fp:
+            fp.writelines(fulltext_lines)
+
+        print(f"German subtitles saved to {json_fpath}")
         print(f"Video title: {video_title}")
 
     except Exception as e:
