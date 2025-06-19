@@ -13,7 +13,7 @@ def download_german_subtitles(video_url):
 
     try:
         # Try to fetch German (language code 'de') subtitles
-        IPS()
+        # IPS()
         transcript = YouTubeTranscriptApi.get_transcript(video_id, languages=["de"])
         # Save to a file
         with open(f'{video_id}_german_subtitles.txt', 'w', encoding='utf-8') as f:
@@ -24,5 +24,6 @@ def download_german_subtitles(video_url):
         print(f"Could not download German subtitles: {e}")
 
 # Example usage
-video_url = "https://www.youtube.com/watch?v=niCVX4r79zs"
+# video_url = "https://www.youtube.com/watch?v=niCVX4r79zs"
+video_url = "https://www.youtube.com/watch?v=U2vzHbyOhV4"
 download_german_subtitles(video_url)
