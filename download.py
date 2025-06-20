@@ -52,7 +52,7 @@ def get_video_info(video_id):
         print(f"Could not fetch video info: {e}")
     return video_id, None
 
-def get_existing_video_urls():
+def get_existing_video_urls_from_downloaded_json_files():
     """Get set of already downloaded video URLs from output JSON files."""
     existing_urls = set()
     output_dir = "./output"
@@ -156,13 +156,18 @@ def main():
     # Example playlist URL - replace with your desired playlist
     playlist_url = "https://www.youtube.com/playlist?list=PLMsZgEMEKvQKQDNhrHnxY9ScIcWMq5qzf"
 
-    existing_urls = get_existing_video_urls()
+    existing_urls = get_existing_video_urls_from_downloaded_json_files()
 
     if playlist_url:
         video_urls = get_playlist_videos(playlist_url)
+
+        #IPS()
         for url in video_urls:
-            download_german_subtitles(url, existing_urls)
-            time.sleep(10)  # Pause between downloads
+            try:
+                download_german_subtitles(url, existing_urls)
+                time.sleep(10)  # Pause between downloads
+            except:
+                print("Problem with url", url)
     else:
         exit()
         # Fallback to single video download
