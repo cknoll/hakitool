@@ -1,22 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Results for "{{ search_term }}"</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Results for "{{ search_term }}"{% endblock %}
+
+{% block content %}
     <h1>Results for "{{ search_term }}"</h1>
-    <a href="/">New Search</a>
+    <a href="/">← New Search</a>
     
     {% if results %}
-        <p>Found {{ results|length }} matches:</p>
+        <p class="results-count">Found {{ results|length }} matches:</p>
         {% for filename, context in results %}
-            <div style="margin: 2em 0; padding: 1em; border: 1px solid #ccc;">
-                <h3>{{ filename }}</h3>
+            <div class="result-container">
+                <h3 class="result-title">{{ filename }}</h3>
                 <pre>{{ context | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
             </div>
         {% endfor %}
     {% else %}
-        <p>No matches found for "{{ search_term }}"</p>
+        <p class="no-results">No matches found for "{{ search_term }}"</p>
     {% endif %}
-</body>
-</html>
+{% endblock %}

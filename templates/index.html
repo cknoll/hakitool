@@ -1,13 +1,11 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Text Search Engine</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Text Search Engine{% endblock %}
+
+{% block content %}
     <h1>Text Search Engine</h1>
     <form method="POST">
         <input type="text" name="search_term" placeholder="Enter search term..." required>
         <button type="submit">Search</button>
     </form>
-</body>
-</html>
+{% endblock %}
