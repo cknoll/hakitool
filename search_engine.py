@@ -78,6 +78,7 @@ class TextFileIndexer:
             except Exception as e:
                 print(f"Error searching {filepath}: {e}")
 
+        results.sort(key=lambda x: x[0])  # Sort by filename
         return results
 
 def main():
