@@ -4,13 +4,25 @@ import pickle
 from pathlib import Path
 
 class TextFileIndexer:
-    def __init__(self, directory):
+    def __init__(self, directory: str) -> None:
+        """Initialize the TextFileIndexer with a directory to search.
+        
+        Args:
+            directory: Path to the directory containing text files to index
+        """
         self.directory = directory
         self.index_file = "file_index.pkl"
         self.index = {}
 
-    def build_index(self):
-        """Build an index of all words in all text files"""
+    def build_index(self) -> None:
+        """Build an index of all words in all text files.
+        
+        Creates an inverted index mapping words to files containing them.
+        The index is saved to disk as a pickle file for future use.
+        
+        Returns:
+            None
+        """
         print("Building index... (This may take a while for many files)")
         self.index = {}
 
@@ -37,23 +49,44 @@ class TextFileIndexer:
             pickle.dump(self.index, f)
         print("\nIndex built and saved successfully.")
 
-    def load_index(self):
-        """Load existing index from file"""
+    def load_index(self) -> bool:
+        """Load existing index from file.
+        
+        Returns:
+            bool: True if index was loaded successfully, False otherwise
+        """
         if os.path.exists(self.index_file):
             with open(self.index_file, 'rb') as f:
                 self.index = pickle.load(f)
             return True
         return False
 
-    def search_in_index(self, search_term):
-        """Search for term in the index"""
+    def search_in_index(self, search_term: str) -> list[str]:
+        """Search for term in the pre-built index.
+        
+        Args:
+            search_term: Word to search for in the index
+            
+        Returns:
+            list[str]: List of filepaths containing the term
+        """
         search_term = search_term.lower()
         if search_term in self.index:
             return self.index[search_term]
         return []
 
-    def search_in_files(self, search_term, context_lines=3):
-        """Search for term in files, showing context"""
+    def search_in_files(self, search_term: str, context_lines: int = 3) -> list[tuple[str, str]]:
+        """Search for term in files, showing surrounding context.
+        
+        Args:
+            search_term: Text string to search for
+            context_lines: Number of lines to show around each match
+            
+        Returns:
+            list[tuple[str, str]]: List of tuples containing:
+                - filename (str)
+                - matched content with context (str)
+        """
         # First try to use the index
         possible_files = self.search_in_index(search_term)
         if not possible_files:
@@ -81,7 +114,12 @@ class TextFileIndexer:
         results.sort(key=lambda x: x[0])  # Sort by filename
         return results
 
-def main():
+def main() -> None:
+    """Command line interface for the text search engine.
+    
+    Allows interactive searching through text files in a directory.
+    Handles building and loading search indexes.
+    """
     # directory = input("Enter the directory containing text files (default: current directory): ") or "."
     directory = "output/fulltext"
 
