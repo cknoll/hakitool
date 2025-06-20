@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Viewing {{ filename }}{% endblock %}
+
+{% block content %}
+    <h1>{{ filename }}</h1>
+    <a href="{{ request.referrer or url_for('home') }}">← Back to results</a>
+    
+    <div class="file-view-container">
+        <pre class="highlighted-content">{{ content | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
+    </div>
+{% endblock %}

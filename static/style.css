@@ -71,8 +71,21 @@ pre {
     overflow-x: auto;
 }
 
+.highlighted-content {
+    background-color: #fffbf0;
+    padding: 20px;
+    border-radius: 4px;
+}
+
 mark {
     background-color: #ffff00;
+    padding: 2px 0;
+}
+
+.file-view-container {
+    margin-top: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
 }
 
 a {

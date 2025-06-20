@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, abort
 from search_engine import TextFileIndexer
 
 app = Flask(__name__)
@@ -30,6 +30,23 @@ def home() -> str:
         return redirect(url_for('home'))
 
     return render_template('index.html')
+
+@app.route('/file/<path:filename>')
+def show_file(filename: str) -> str:
+    """Show full file content with all matches highlighted.
+    
+    Args:
+        filename: Path to the file to display
+        
+    Returns:
+        str: Rendered template with file content
+    """
+    try:
+        with open(filename, 'r', encoding='utf-8', errors='ignore') as f:
+            content = f.read()
+        return render_template('file_view.html', filename=filename, content=content)
+    except Exception as e:
+        abort(404)
 
 if __name__ == '__main__':
     app.run(debug=True)

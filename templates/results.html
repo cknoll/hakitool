@@ -10,7 +10,11 @@
         <p class="results-count">Found {{ results|length }} matches:</p>
         {% for filename, context in results %}
             <div class="result-container">
-                <h3 class="result-title">{{ filename }}</h3>
+                <h3 class="result-title">
+                    <a href="{{ url_for('show_file', filename=filename) }}">
+                        {{ filename }}
+                    </a>
+                </h3>
                 <pre>{{ context | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
             </div>
         {% endfor %}
