@@ -100,14 +100,17 @@ class TextFileIndexer:
             try:
                 with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
                     lines = f.readlines()
+                    file_matches = []
                     for i, line in enumerate(lines):
                         if search_re.search(line):
                             # Get context lines
                             start = max(0, i - context_lines)
                             end = min(len(lines), i + context_lines + 1)
                             context = ''.join(lines[start:end])
-                            results.append((filepath, context))
-                            break  # Only show first match per file
+                            file_matches.append(context)
+                    
+                    if file_matches:
+                        results.append((filepath, file_matches))
             except Exception as e:
                 print(f"Error searching {filepath}: {e}")
 
