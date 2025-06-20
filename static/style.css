@@ -49,7 +49,7 @@ button:hover {
     opacity: 0.9;
 }
 
-.result-container {
+.file-container {
     margin: 2em 0;
     padding: 20px;
     border: 1px solid var(--border-color);
@@ -57,9 +57,21 @@ button:hover {
     background-color: white;
 }
 
-.result-title {
+.file-title {
     margin-bottom: 15px;
     color: var(--primary-color);
+}
+
+.match-container {
+    margin: 1em 0;
+    padding: 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    background-color: var(--secondary-color);
+}
+
+.match-container pre {
+    margin: 0;
 }
 
 pre {

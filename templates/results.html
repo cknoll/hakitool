@@ -8,14 +8,18 @@
     
     {% if results %}
         <p class="results-count">Found {{ results|length }} matches:</p>
-        {% for filename, context in results %}
-            <div class="result-container">
-                <h3 class="result-title">
+        {% for filename, contexts in results %}
+            <div class="file-container">
+                <h2 class="file-title">
                     <a href="{{ url_for('show_file', filename=filename) }}">
-                        {{ filename }}
+                        {{ filename }} ({{ contexts|length }} matches)
                     </a>
-                </h3>
-                <pre>{{ context | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
+                </h2>
+                {% for context in contexts %}
+                    <div class="match-container">
+                        <pre>{{ context | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
+                    </div>
+                {% endfor %}
             </div>
         {% endfor %}
     {% else %}
