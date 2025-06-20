@@ -12,7 +12,7 @@
         {% for filename, context in results %}
             <div style="margin: 2em 0; padding: 1em; border: 1px solid #ccc;">
                 <h3>{{ filename }}</h3>
-                <pre>{{ context }}</pre>
+                <pre>{{ context | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
             </div>
         {% endfor %}
     {% else %}
