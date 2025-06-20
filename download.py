@@ -27,7 +27,7 @@ def get_video_info(video_id):
         if response.status_code == 200:
             data = response.json()
             title = data.get('title', video_id)
-            
+
             # Try to get publish date from RSS feed as oembed doesn't provide it
             rss_url = f"https://www.youtube.com/feeds/videos.xml?channel_id={video_id}"
             try:
@@ -46,13 +46,49 @@ def get_video_info(video_id):
                         return title, publish_date
             except Exception:
                 pass
-            
+
             return title, None
     except Exception as e:
         print(f"Could not fetch video info: {e}")
     return video_id, None
 
-def download_german_subtitles(video_url):
+def get_existing_video_urls():
+    """Get set of already downloaded video URLs from output JSON files."""
+    existing_urls = set()
+    output_dir = "./output"
+    if os.path.exists(output_dir):
+        for filename in os.listdir(output_dir):
+            if filename.endswith('.json'):
+                filepath = os.path.join(output_dir, filename)
+                try:
+                    with open(filepath, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+                        existing_urls.add(data['video_url'])
+                except (json.JSONDecodeError, KeyError):
+                    continue
+    return existing_urls
+
+def get_playlist_videos(playlist_url):
+    """Extract video IDs from a YouTube playlist URL."""
+    try:
+        video_ids = []
+        # This is a placeholder - in practice you'd need to scrape the playlist page
+        # or use the YouTube API to get the video IDs
+        html = requests.get(playlist_url).text
+        matches = re.findall(r'watch\?v=([a-zA-Z0-9_-]+)', html)
+        if matches:
+            video_ids = list(set(matches))
+        return [f"https://www.youtube.com/watch?v={vid}" for vid in video_ids]
+    except Exception as e:
+        print(f"Error getting playlist videos: {e}")
+        return []
+
+def download_german_subtitles(video_url, existing_urls=None):
+    """Download German subtitles for a single video."""
+    if existing_urls and video_url in existing_urls:
+        print(f"Skipping already downloaded video: {video_url}")
+        return
+
     # Extract video ID from URL
     video_id = video_url.split('v=')[1].split('&')[0]
 
@@ -63,7 +99,7 @@ def download_german_subtitles(video_url):
     # Get video title and publish date, create slugified filename
     video_title, publish_date = get_video_info(video_id)
     slugified_title = slugify(video_title)
-    
+
     # Prepend publish date to filename if available
     if publish_date:
         filename_prefix = f"{publish_date}_{slugified_title}"
@@ -111,5 +147,27 @@ def download_german_subtitles(video_url):
 
 # Example usage
 # video_url = "https://www.youtube.com/watch?v=niCVX4r79zs"
-video_url = "https://www.youtube.com/watch?v=U2vzHbyOhV4"
-download_german_subtitles(video_url)
+
+
+
+def main():
+    import time
+
+    # Example playlist URL - replace with your desired playlist
+    playlist_url = "https://www.youtube.com/playlist?list=PLMsZgEMEKvQKQDNhrHnxY9ScIcWMq5qzf"
+
+    existing_urls = get_existing_video_urls()
+
+    if playlist_url:
+        video_urls = get_playlist_videos(playlist_url)
+        for url in video_urls:
+            download_german_subtitles(url, existing_urls)
+            time.sleep(10)  # Pause between downloads
+    else:
+        exit()
+        # Fallback to single video download
+        video_url = "https://www.youtube.com/watch?v=sNwK_3BVjKU"
+        download_german_subtitles(video_url)
+
+if __name__ == "__main__":
+    main()
