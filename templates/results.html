@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results for "{{ search_term }}"</title>
+</head>
+<body>
+    <h1>Results for "{{ search_term }}"</h1>
+    <a href="/">New Search</a>
+    
+    {% if results %}
+        <p>Found {{ results|length }} matches:</p>
+        {% for filename, context in results %}
+            <div style="margin: 2em 0; padding: 1em; border: 1px solid #ccc;">
+                <h3>{{ filename }}</h3>
+                <pre>{{ context }}</pre>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No matches found for "{{ search_term }}"</p>
+    {% endif %}
+</body>
+</html>
