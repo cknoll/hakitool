@@ -27,6 +27,7 @@
                 {% for context in contexts %}
                     <div class="match-container">
                         <pre>{% for line in context.text.split('\n') %}
+                            <!-- TODO-AIDER: each line number (i.e. the number before the following colon) should be a hyperlink. its target should be the respective file view with an anchor to the respective line -->
 {{ loop.index + context.start_line - 1 }}: {{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% endfor %}</pre>
                     </div>
                 {% endfor %}
