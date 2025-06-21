@@ -3,10 +3,12 @@ import re
 import pickle
 from pathlib import Path
 
+from ipydex import IPS
+
 class TextFileIndexer:
     def __init__(self, directory: str) -> None:
         """Initialize the TextFileIndexer with a directory to search.
-        
+
         Args:
             directory: Path to the directory containing text files to index
         """
@@ -16,10 +18,10 @@ class TextFileIndexer:
 
     def build_index(self) -> None:
         """Build an index of all words in all text files.
-        
+
         Creates an inverted index mapping words to files containing them.
         The index is saved to disk as a pickle file for future use.
-        
+
         Returns:
             None
         """
@@ -51,7 +53,7 @@ class TextFileIndexer:
 
     def load_index(self) -> bool:
         """Load existing index from file.
-        
+
         Returns:
             bool: True if index was loaded successfully, False otherwise
         """
@@ -63,10 +65,10 @@ class TextFileIndexer:
 
     def search_in_index(self, search_term: str) -> list[str]:
         """Search for term in the pre-built index.
-        
+
         Args:
             search_term: Word to search for in the index
-            
+
         Returns:
             list[str]: List of filepaths containing the term
         """
@@ -77,11 +79,11 @@ class TextFileIndexer:
 
     def search_in_files(self, search_term: str, context_lines: int = 3) -> list[tuple[str, list[str]]]:
         """Search for term in files, showing surrounding context.
-        
+
         Args:
             search_term: Text string to search for
             context_lines: Number of lines to show around each match
-            
+
         Returns:
             list[tuple[str, list[str]]]: List of tuples containing:
                 - filename (str)
@@ -108,18 +110,19 @@ class TextFileIndexer:
                             end = min(len(lines), i + context_lines + 1)
                             context = ''.join(lines[start:end])
                             file_matches.append(context)
-                    
+
                     if file_matches:
                         results.append((filepath, file_matches))
             except Exception as e:
                 print(f"Error searching {filepath}: {e}")
 
         results.sort(key=lambda x: x[0])  # Sort by filename
+        IPS()
         return results
 
 def main() -> None:
     """Command line interface for the text search engine.
-    
+
     Allows interactive searching through text files in a directory.
     Handles building and loading search indexes.
     """
