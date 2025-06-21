@@ -8,7 +8,6 @@
 
     <div class="file-view-container">
         <pre>{% for line in content.split('\n') %}
-            <!-- TODO-AIDER: each line number should be an anchor link. these links are referenced from `results.html`, see HINT-FOR-AIDER-comment  -->
-{{ loop.index }}: {{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% endfor %}</pre>
+<a id="L{{ loop.index }}" href="#L{{ loop.index }}" class="line-number">{{ loop.index }}:</a> {{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% endfor %}</pre>
     </div>
 {% endblock %}
