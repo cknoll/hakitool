@@ -27,6 +27,7 @@
                 {% for context in contexts %}
                     <div class="match-container">
                         <pre>{% for line in context.text.split('\n') %}
+                            <!-- HINT-FOR-AIDER: Here we create the links which will trigger the file_view-template to be rendered. We have to pass the parameter `search_term` to the `url_for(...)-call -->
 <a href="{{ url_for('show_file', filename=filename) }}#L{{ loop.index + context.start_line - 1 }}" class="line-number">{{ loop.index + context.start_line - 1 }}:</a> {{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% endfor %}</pre>
                     </div>
                 {% endfor %}
