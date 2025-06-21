@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Results for "{{ search_term }}"</h1>
     <a href="/">← New Search</a>
-    
+
     {% if results %}
         <p class="results-count">Found {{ results|length }} matches:</p>
         {% for filename, contexts in results %}
@@ -15,6 +15,10 @@
                         {{ filename }} ({{ contexts|length }} matches)
                     </a>
                 </h2>
+                <hr>
+                debugging-output: {{contexts}}
+                <hr>
+                <!-- HINT-FOR-AIDER: I checked the debugging output. `contexts` is a string but it should be a list -->
                 {% for context in contexts %}
                     <div class="match-container">
                         <pre>{{ context | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
@@ -25,4 +29,5 @@
     {% else %}
         <p class="no-results">No matches found for "{{ search_term }}"</p>
     {% endif %}
+
 {% endblock %}

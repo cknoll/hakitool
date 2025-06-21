@@ -23,6 +23,11 @@ def home() -> str:
     if request.method == 'POST':
         search_term = request.form.get('search_term', '').strip()
         if search_term:
+
+            # TODO-AIDER: the object `results` has the wrong structure.
+            # I think it should be a list of 2-tuples where the first entry is a string and the second entry is a list of strings.
+            # However it is a list of 2-tuples where the first entry is a string and the second entry is also a string (and not a list of strings as it should be).
+            # Please figure out the reason and correct it. If you think my observation is wrong please report.
             results = indexer.search_in_files(search_term)
             return render_template('results.html',
                                 search_term=search_term,
@@ -34,10 +39,10 @@ def home() -> str:
 @app.route('/file/<path:filename>')
 def show_file(filename: str) -> str:
     """Show full file content with all matches highlighted.
-    
+
     Args:
         filename: Path to the file to display
-        
+
     Returns:
         str: Rendered template with file content
     """
