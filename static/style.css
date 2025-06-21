@@ -90,6 +90,7 @@ pre a.line-number {
     width: 3em;
     padding-right: 1em;
     margin-right: 1em;
+    margin-bottom: 0;
     color: var(--light-text);
     text-align: right;
     border-right: 1px solid var(--border-color);
