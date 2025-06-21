@@ -20,6 +20,8 @@ Plus some other words.""")
         with open(self.file2, 'w') as f:
             f.write("""This is test file two.
 It has a banana.
+Banana appears again here.
+And some more banana.
 And some different words.""")
 
         self.indexer = TextFileIndexer(self.test_dir)
@@ -66,6 +68,16 @@ And some different words.""")
         self.assertEqual(filename, self.file1)
         self.assertTrue(isinstance(contexts, list))
         self.assertTrue(all(isinstance(ctx, str) for ctx in contexts))
+
+    def test_multiple_matches_in_single_file(self):
+        """Test that multiple matches in one file are all returned as separate contexts"""
+        results = self.indexer.search_in_files("banana")
+        banana_file_results = [r for r in results if r[0] == self.file2]
+        self.assertEqual(len(banana_file_results), 1)
+        _, contexts = banana_file_results[0]
+        self.assertEqual(len(contexts), 3)  # Should find 3 matches in file2
+        for ctx in contexts:
+            self.assertTrue("banana" in ctx.lower())
 
 if __name__ == '__main__':
     unittest.main()
