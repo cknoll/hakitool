@@ -72,8 +72,12 @@ def show_file(filename: str) -> str:
     """
     try:
         with open(filename, 'r', encoding='utf-8', errors='ignore') as f:
+            search_term = request.args.get('search_term', '')
             content = f.read()
-        return render_template('file_view.html', filename=filename, content=content)
+        return render_template('file_view.html', 
+                            filename=filename, 
+                            content=content,
+                            search_term=search_term)
     except Exception as e:
         abort(404)
 

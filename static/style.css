@@ -81,6 +81,22 @@ pre {
     padding: 15px;
     border-radius: 4px;
     overflow-x: auto;
+    counter-reset: line;
+}
+
+pre .line-number {
+    display: inline-block;
+    width: 3em;
+    padding-right: 1em;
+    margin-right: 1em;
+    color: var(--light-text);
+    text-align: right;
+    border-right: 1px solid var(--border-color);
+    user-select: none;
+}
+
+.match-container pre {
+    background-color: #f5f5f5;
 }
 
 .highlighted-content {

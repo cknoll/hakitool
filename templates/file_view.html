@@ -7,7 +7,7 @@
     <a href="{{ request.referrer or url_for('home') }}">← Back to results</a>
 
     <div class="file-view-container">
-        <!-- line numbers should be shown here -->
-        <pre>{{ content | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
+        <pre>{% for line in content.split('\n') %}
+{{ loop.index }}: {{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% endfor %}</pre>
     </div>
 {% endblock %}
