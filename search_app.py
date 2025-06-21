@@ -3,6 +3,12 @@ from search_engine import TextFileIndexer
 
 app = Flask(__name__)
 
+# Register type filter function
+@app.template_filter('type')
+def format_type(obj) -> str:
+    """Jinja2 template filter to get object type"""
+    return str(type(obj).__name__)
+
 app.config['SEARCH_DIRECTORY'] = "output/fulltext"
 indexer = TextFileIndexer(app.config['SEARCH_DIRECTORY'])
 
