@@ -75,7 +75,7 @@ class TextFileIndexer:
             return self.index[search_term]
         return []
 
-    def search_in_files(self, search_term: str, context_lines: int = 3) -> list[tuple[str, str]]:
+    def search_in_files(self, search_term: str, context_lines: int = 3) -> list[tuple[str, list[str]]]:
         """Search for term in files, showing surrounding context.
         
         Args:
@@ -83,9 +83,9 @@ class TextFileIndexer:
             context_lines: Number of lines to show around each match
             
         Returns:
-            list[tuple[str, str]]: List of tuples containing:
+            list[tuple[str, list[str]]]: List of tuples containing:
                 - filename (str)
-                - matched content with context (str)
+                - list of matched contexts (list[str])
         """
         # First try to use the index
         possible_files = self.search_in_index(search_term)
