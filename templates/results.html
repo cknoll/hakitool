@@ -16,11 +16,24 @@
                     </a>
                 </h2>
                 <hr>
-                    <!-- TODO-AIDER: For debugging I want to display the data-structure of the object `{{ context }}`. It can be assumed that it is a nested sequence.
-                         I want to see the type of every element. If it is a sequence I want to see the types of its elements and so on.
-                         If necessary you can also add code in the calling python script.
-                    -->
-
+                <div class="debug-info" style="display: none;">
+                    <h3>Debug Information</h3>
+                    <p>Results object type: {{ results|type }}</p>
+                    <p>Results structure:</p>
+                    <ul>
+                        {% for filename, contexts in results %}
+                            <li>
+                                {{ filename|type }}: 
+                                <ul>
+                                    <li>{{ contexts|type }}</li>
+                                    {% for context in contexts %}
+                                        <li>{{ context|type }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
                 <hr>
                 {% for context in contexts %}
                     <div class="match-container">

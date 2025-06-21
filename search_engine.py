@@ -117,7 +117,6 @@ class TextFileIndexer:
                 print(f"Error searching {filepath}: {e}")
 
         results.sort(key=lambda x: x[0])  # Sort by filename
-        IPS()
         return results
 
 def main() -> None:
