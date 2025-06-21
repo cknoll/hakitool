@@ -26,8 +26,8 @@
                 #}
                 {% for context in contexts %}
                     <div class="match-container">
-                        <!-- TODO-AIDER: line numbers should be shown here -->
-                        <pre>{{ context | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
+                        <pre>{% for line in context.split('\n') %}
+{{ loop.index }}: {{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% endfor %}</pre>
                     </div>
                 {% endfor %}
             </div>
