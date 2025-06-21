@@ -26,9 +26,8 @@
                 #}
                 {% for context in contexts %}
                     <div class="match-container">
-                        <pre>{% for line in context.split('\n') %}
-                            <!-- TODO-AIDER: the line number (currently inserted by `loop.counter` should be the line number w.r.t. the original file) -->
-{{ loop.index }}: {{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% endfor %}</pre>
+                        <pre>{% for line in context.text.split('\n') %}
+{{ loop.index + context.start_line - 1 }}: {{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% endfor %}</pre>
                     </div>
                 {% endfor %}
             </div>

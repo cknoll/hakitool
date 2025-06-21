@@ -105,10 +105,13 @@ class TextFileIndexer:
                     file_matches = []
                     for i, line in enumerate(lines):
                         if search_re.search(line):
-                            # Get context lines
+                            # Get context lines with start line info
                             start = max(0, i - context_lines)
                             end = min(len(lines), i + context_lines + 1)
-                            context = ''.join(lines[start:end])
+                            context = {
+                                'text': ''.join(lines[start:end]),
+                                'start_line': start + 1  # convert to 1-based index
+                            }
                             file_matches.append(context)
 
                     if file_matches:
