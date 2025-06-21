@@ -8,8 +8,6 @@
 
     <div class="file-view-container">
         <pre>{% for line in content.split('\n') %}
-            <!-- TODO-AIDER: The following code uses the variable `search_term` which is not yet defined. It should be passed to the template by the app. The app should obtain it via url. This means it has to be added to the url at the position where we link to this file_view-page (see HINT-FOR-AIDER-comment).
-             If `search_term` is undefined or empty no replacement should happen. -->
-<a id="L{{ loop.index }}" href="#L{{ loop.index }}" class="line-number">{{ loop.index }}:</a> {% if search_term %}{{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% else %}{{ line | safe }}{% endif %}{% endfor %}</pre>
+<a id="L{{ loop.index }}" href="#L{{ loop.index }}" class="line-number">{{ loop.index }}:</a> {% if search_term %}{{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% else %}{{ line }}{% endif %}{% endfor %}</pre>
     </div>
 {% endblock %}

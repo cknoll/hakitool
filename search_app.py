@@ -56,6 +56,7 @@ def home() -> str:
 
     return render_template('index.html')
 
+# HINT-FOR-AIDER: the following function has to be adapted (route, code and docstring)
 @app.route('/file/<path:filename>')
 def show_file(filename: str) -> str:
     """Show full file content with all matches highlighted.
