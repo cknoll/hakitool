@@ -9,6 +9,24 @@ def format_type(obj) -> str:
     """Jinja2 template filter to get object type"""
     return str(type(obj).__name__)
 
+def nested_to_html(data, indent=0):
+    result = ""
+    if isinstance(data, (list, tuple)):
+        result += "<li>{} of length {}<ul>\n".format(type(data).__name__, len(data))
+        for item in data:
+            result += nested_to_html(item, indent + 1)
+        result += "</ul></li>\n"
+    else:
+        result += "<li>{}: {}</li>\n".format(type(data).__name__, repr(data))
+    return result
+
+
+@app.template_filter('get_html_overview')
+def get_html_overview(data):
+    html = '<ul>\n' + nested_to_html(data) + '</ul>'
+    return html
+
+
 app.config['SEARCH_DIRECTORY'] = "output/fulltext"
 indexer = TextFileIndexer(app.config['SEARCH_DIRECTORY'])
 

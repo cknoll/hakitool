@@ -15,26 +15,15 @@
                         {{ filename }} ({{ contexts|length }} matches)
                     </a>
                 </h2>
-                <hr>
-                <div class="debug-info" style="display: none;">
-                    <h3>Debug Information</h3>
-                    <p>Results object type: {{ results|type }}</p>
-                    <p>Results structure:</p>
-                    <ul>
-                        {% for filename, contexts in results %}
-                            <li>
-                                {{ filename|type }}: 
-                                <ul>
-                                    <li>{{ contexts|type }}</li>
-                                    {% for context in contexts %}
-                                        <li>{{ context|type }}</li>
-                                    {% endfor %}
-                                </ul>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-                <hr>
+                {#
+                    <!-- debugging data-structure -->
+                    <hr>
+                    <div class="debug-info" style="display: block;">
+                        <h3>Debug Information</h3>
+                        <p>Results object type: {{ results|get_html_overview | safe}}</p>
+                    </div>
+                    <hr>
+                #}
                 {% for context in contexts %}
                     <div class="match-container">
                         <pre>{{ context | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
