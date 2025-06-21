@@ -84,7 +84,8 @@ pre {
     counter-reset: line;
 }
 
-pre .line-number {
+pre .line-number,
+pre a.line-number {
     display: inline-block;
     width: 3em;
     padding-right: 1em;
@@ -93,6 +94,11 @@ pre .line-number {
     text-align: right;
     border-right: 1px solid var(--border-color);
     user-select: none;
+}
+
+pre a.line-number:hover {
+    color: var(--primary-color);
+    text-decoration: underline;
 }
 
 .match-container pre {
