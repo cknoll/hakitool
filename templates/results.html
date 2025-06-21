@@ -15,6 +15,13 @@
                         {{ filename }} ({{ contexts|length }} matches)
                     </a>
                 </h2>
+                <hr>
+                    <!-- TODO-AIDER: For debugging I want to display the data-structure of the object `{{ context }}`. It can be assumed that it is a nested sequence.
+                         I want to see the type of every element. If it is a sequence I want to see the types of its elements and so on.
+                         If necessary you can also add code in the calling python script.
+                    -->
+
+                <hr>
                 {% for context in contexts %}
                     <div class="match-container">
                         <pre>{{ context | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}</pre>
