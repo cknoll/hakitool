@@ -205,7 +205,8 @@ class DeploymentManager:
                 deployment_root_path=self.target_deployment_root_path,
                 port=self.port,
                 user=self.user,
-                url_path=self.config("dep::url_path")
+                url_path=self.config("dep::url_path"),
+                app_name=self.config("dep::app_name"),
             ),
         )
 
@@ -247,7 +248,7 @@ class DeploymentManager:
 
         print("\n", "upload current project-root including workdir", "\n")
 
-        filters = f" --exclude='.idea/'  --exclude='.vscode/'"
+        filters = f" --exclude='.idea/'  --exclude='.vscode/' --exclude='*aider*'"
 
         # NOTE: we upload only the repo, not the surrounding dir (like in other projects)
         c.rsync_upload(
@@ -272,7 +273,6 @@ class DeploymentManager:
         c.activate_venv(f"~/{self.venv}/bin/activate")
 
         c.chdir(self.target_deployment_root_path)
-        IPS()
         c.run("pip install -r requirements.txt", target_spec="both")
         c.run("pip install -e .", target_spec="both")
         pycmd = "import time; print(time.strftime(r'%Y-%m-%d %H:%M:%S'))"
@@ -289,6 +289,10 @@ def main(dm: DeploymentManager = None, **kwargs):
         dm.purge_deployment_dir()
 
     if dm.args.debug:
+        # dm.set_web_backend()
+        dm.render_and_upload_config_files()
+        exit()
+
         ## create_and_setup_venv()
 
         # dm.upload_flabbs_repo()
@@ -307,7 +311,6 @@ def main(dm: DeploymentManager = None, **kwargs):
         exit()
 
         # c.deploy_local_package("/home/ck/projekte/rst_python/ipydex/repo")
-        # set_web_backend()
         # render_and_upload_config_files()
         # c.run(f"supervisorctl restart {uwsg_service_name}")
 
