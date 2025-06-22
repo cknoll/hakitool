@@ -75,6 +75,8 @@ def nested_to_html(data, indent=0):
 def create_app(config=None):
     c.logger.debug(f"creating app object")
 
+    # TODO: Change the root path here if templates are in a different location
+    # Example: app = Flask(__name__, instance_relative_config=True, root_path='/path/to/your/project')
     app = Flask(__name__, instance_relative_config=True)
 
     # Register type filter function
