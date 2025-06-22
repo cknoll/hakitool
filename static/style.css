@@ -4,6 +4,7 @@
     --border-color: #dadce0;
     --text-color: #202124;
     --light-text: #5f6368;
+    --font-size-all: max(min(16px, 2.5vw), 12px);
 }
 
 body {
@@ -13,6 +14,7 @@ body {
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
+    font-size: var(--font-size-all);
 }
 
 h1 {
@@ -88,8 +90,8 @@ pre .line-number,
 pre a.line-number {
     display: inline-block;
     width: 3em;
-    padding-right: 1em;
-    margin-right: 1em;
+    padding-right: 0.5em;
+    margin-right: 0.5em;
     margin-bottom: 0;
     color: var(--light-text);
     text-align: right;
