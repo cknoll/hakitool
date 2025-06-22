@@ -78,5 +78,6 @@ def show_file(filename: str) -> str:
     except Exception as e:
         abort(404)
 
+
 if __name__ == '__main__':
     app.run(debug=True)

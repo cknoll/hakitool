@@ -1,0 +1,36 @@
+import os
+import argparse
+
+from . import release, search_app
+from . import deploy
+
+
+def main():
+    parser = argparse.ArgumentParser(description=f"cli for hakitool")
+
+    parser.add_argument("--version", "-v", help=f"display version and exit", action="store_true")
+
+    subparsers = parser.add_subparsers(dest="command")
+    run_parser = subparsers.add_parser("run", help="run the application")
+    if deploy.REQUIREMENTS_INSTALLED:
+        deploy_parser = subparsers.add_parser("deploy", help="deploy the application", add_help=False)
+        deploy.DeploymentManager.add_deployment_args(deploy_parser)
+
+    trigger_parser = subparsers.add_parser("trigger", help="simulate a push to a branch of a repo; arg1: <user>/<repo> arg2: <branch>")
+    trigger_parser.add_argument("repo", help="full repo name like `orgname/reponame")
+    trigger_parser.add_argument("branch", help="branch")
+
+    args = parser.parse_args()
+
+    # IPS()
+    if args.version:
+        print(release.__version__)
+        return
+    elif args.command == "run":
+        search_app.main()
+        return
+    elif args.command == "deploy":
+        deploy.main(args=args)
+        return
+
+    parser.print_help()
