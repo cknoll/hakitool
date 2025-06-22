@@ -248,18 +248,16 @@ class DeploymentManager:
         print("\n", "upload current project-root including workdir", "\n")
 
         filters = f" --exclude='.idea/'  --exclude='.vscode/'"
+
+        # NOTE: we upload only the repo, not the surrounding dir (like in other projects)
         c.rsync_upload(
-            self.repo_parent_src_path + "/", self.target_deployment_root_path, filters=filters, target_spec="both"
+            self.repo_src_path + "/", self.target_deployment_root_path, filters=filters, target_spec="both"
         )
 
-        # confpath = Path(self.config.path)
-        # if confpath.is_symlink():
-        #     c.rsync_upload(confpath.resolve(), self.target_deployment_repo_path, target_spec="both")
+        # c.rsync_upload(
+        #     self.repo_parent_src_path + "/", self.target_deployment_root_path, filters=filters, target_spec="both"
+        # )
 
-        # c.chdir(self.target_deployment_repo_path)
-
-        # # ensure the existence of `requirements.txt`
-        # c.run(f"touch requirements.txt", target_spec="remote")
 
     def purge_deployment_dir(self):
         c = self.c
@@ -273,7 +271,8 @@ class DeploymentManager:
         c = self.c
         c.activate_venv(f"~/{self.venv}/bin/activate")
 
-        c.chdir(self.target_deployment_repo_path)
+        c.chdir(self.target_deployment_root_path)
+        IPS()
         c.run("pip install -r requirements.txt", target_spec="both")
         c.run("pip install -e .", target_spec="both")
         pycmd = "import time; print(time.strftime(r'%Y-%m-%d %H:%M:%S'))"
@@ -310,7 +309,6 @@ def main(dm: DeploymentManager = None, **kwargs):
         # c.deploy_local_package("/home/ck/projekte/rst_python/ipydex/repo")
         # set_web_backend()
         # render_and_upload_config_files()
-        upload_files()
         # c.run(f"supervisorctl restart {uwsg_service_name}")
 
         exit()
