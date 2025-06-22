@@ -248,7 +248,7 @@ class DeploymentManager:
 
         print("\n", "upload current project-root including workdir", "\n")
 
-        filters = f" --exclude='.idea/'  --exclude='.vscode/' --exclude='*aider*'"
+        filters = f" --exclude='.idea/'  --exclude='.vscode/' --exclude='*aider*' --exclude='.git/*'"
 
         # NOTE: we upload only the repo, not the surrounding dir (like in other projects)
         c.rsync_upload(

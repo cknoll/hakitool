@@ -5,7 +5,7 @@
     --text-color: #202124;
     --light-text: #5f6368;
     --font-size-all: max(min(16px, 2.5vw), 10px);
-    --font-size-pre: max(min(16px, 2.65vw), 5px);
+    --font-size-pre: max(min(16px, 2.5vw), 5px);
 }
 
 body {

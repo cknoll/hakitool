@@ -12,7 +12,7 @@
             <div class="file-container">
                 <h2 class="file-title">
                     <a href="{{ url_for('show_file', filename=filename) }}">
-                        {{ filename }} ({{ contexts|length }} matches)
+                        {{ filename | replace("output/fulltext/", "") }} ({{ contexts|length }} matches)
                     </a>
                 </h2>
                 {#
