@@ -27,7 +27,6 @@
                 {% for context in contexts %}
                     <div class="match-container">
                         <pre>{% for line in context.text.split('\n') %}
-                            <!-- TODO-AIDER: We pass two parameters to url_for('show_file', ...), however currently only one parameter (`filename`) is expected. Please extend the code in `search_app.py`. See also HINT-FOR-AIDER:-->
 <a href="{{ url_for('show_file', filename=filename, search_term=search_term) }}#L{{ loop.index + context.start_line - 1 }}" class="line-number">{{ loop.index + context.start_line - 1 }}:</a> {{ line | replace(search_term, '<mark>' ~ search_term ~ '</mark>') | safe }}{% endfor %}</pre>
                     </div>
                 {% endfor %}
