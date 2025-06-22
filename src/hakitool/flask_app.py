@@ -19,6 +19,11 @@ APP_NAME = "hakitool"
 c = Container()
 c.LOGFILENAME = f"{APP_NAME}.log"
 
+# this assumes the package is installed with `pip install -e .`
+c.PROJECT_ROOT_PATH = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+assert os.path.isfile(os.path.join(c.PROJECT_ROOT_PATH, "pyproject.toml"))
+assert os.path.isdir(os.path.join(c.PROJECT_ROOT_PATH, "templates"))
+
 
 def init(confpath="config.toml", test_mode=False):
     """
@@ -75,9 +80,7 @@ def nested_to_html(data, indent=0):
 def create_app(config=None):
     c.logger.debug(f"creating app object")
 
-    # TODO: Change the root path here if templates are in a different location
-    # Example: app = Flask(__name__, instance_relative_config=True, root_path='/path/to/your/project')
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, root_path=c.PROJECT_ROOT_PATH)
 
     # Register type filter function
     @app.template_filter('type')
