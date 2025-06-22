@@ -16,10 +16,6 @@ def main():
         deploy_parser = subparsers.add_parser("deploy", help="deploy the application", add_help=False)
         deploy.DeploymentManager.add_deployment_args(deploy_parser)
 
-    trigger_parser = subparsers.add_parser("trigger", help="simulate a push to a branch of a repo; arg1: <user>/<repo> arg2: <branch>")
-    trigger_parser.add_argument("repo", help="full repo name like `orgname/reponame")
-    trigger_parser.add_argument("branch", help="branch")
-
     args = parser.parse_args()
 
     # IPS()
