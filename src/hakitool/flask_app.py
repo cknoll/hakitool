@@ -113,11 +113,13 @@ def create_app(config=None):
             if search_term:
 
                 results = indexer.search_in_files(search_term)
+                c.logger.debug(f"Template search paths: {app.jinja_env.loader.searchpath}")
                 return render_template('results.html',
                                     search_term=search_term,
                                     results=results)
             return redirect(url_for('home'))
 
+        c.logger.debug(f"Template search paths: {app.jinja_env.loader.searchpath}")
         return render_template('index.html')
 
     @app.route('/file/<path:filename>')
@@ -134,6 +136,7 @@ def create_app(config=None):
             with open(filename, 'r', encoding='utf-8', errors='ignore') as f:
                 search_term = request.args.get('search_term', '')
                 content = f.read()
+            c.logger.debug(f"Template search paths: {app.jinja_env.loader.searchpath}")
             return render_template('file_view.html',
                                 filename=filename,
                                 content=content,
