@@ -240,7 +240,7 @@ class DeploymentManager:
             f'uberspace web backend set {self.config("dep::url_path")} --http --port {self.port}'
         )
 
-    def upload_files_incl_workdir(self):
+    def upload_app_files(self):
         c = self.c
 
         print("\n", "ensure that deployment path exists", "\n")
@@ -290,7 +290,7 @@ def main(dm: DeploymentManager = None, **kwargs):
 
     if dm.args.debug:
         # dm.set_web_backend()
-        dm.render_and_upload_config_files()
+        dm.upload_app_files()
         exit()
 
         ## create_and_setup_venv()
@@ -319,7 +319,7 @@ def main(dm: DeploymentManager = None, **kwargs):
     if dm.args.initial:
 
         dm.create_and_setup_venv()
-        dm.upload_files_incl_workdir()
+        dm.upload_app_files()
         dm.render_and_upload_config_files()
         dm.update_supervisorctl()
         dm.set_web_backend()
@@ -329,7 +329,7 @@ def main(dm: DeploymentManager = None, **kwargs):
 
     dm.render_and_upload_config_files()
 
-    dm.upload_files_incl_workdir()
+    dm.upload_app_files()
     dm.install_app()
     print("\n", "restart uwsgi service", "\n")
     dm.c.run(f"supervisorctl restart {dm.uwsg_service_name}")
