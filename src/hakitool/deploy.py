@@ -239,19 +239,6 @@ class DeploymentManager:
             f'uberspace web backend set {self.config("dep::url_path")} --http --port {self.port}'
         )
 
-    def upload_flabbs_repo(self):
-        c = self.c
-
-        print("\n", "ensure that deployment path exists", "\n")
-        # target_repo_path = f"{self.target_deployment_root_path}/{self.dirname_of_repo}"
-        target_repo_path = f"{self.target_deployment_root_path}"
-        c.run(f"mkdir -p {target_repo_path}")
-
-        filters = f" --exclude='.idea/'  --exclude='.vscode/'"
-        c.rsync_upload(
-            self.repo_src_path + "/", target_repo_path, filters=filters, target_spec="both"
-        )
-
     def upload_files_incl_workdir(self):
         c = self.c
 
@@ -305,7 +292,7 @@ def main(dm: DeploymentManager = None, **kwargs):
     if dm.args.debug:
         ## create_and_setup_venv()
 
-        dm.upload_flabbs_repo()
+        # dm.upload_flabbs_repo()
         # dm.activate_workers()
         # dm.render_and_upload_config_files()
 
@@ -328,10 +315,6 @@ def main(dm: DeploymentManager = None, **kwargs):
 
         exit()
 
-    if dm.args.workers_only:
-        dm.activate_workers()
-        exit()
-
     if dm.args.initial:
 
         dm.create_and_setup_venv()
@@ -346,7 +329,6 @@ def main(dm: DeploymentManager = None, **kwargs):
     dm.render_and_upload_config_files()
 
     dm.upload_files_incl_workdir()
-    dm.activate_workers()
     dm.install_app()
     print("\n", "restart uwsgi service", "\n")
     dm.c.run(f"supervisorctl restart {dm.uwsg_service_name}")
