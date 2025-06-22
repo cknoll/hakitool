@@ -1,7 +1,7 @@
 import os
 import argparse
 
-from . import release, search_app
+from . import flask_app, release
 from . import deploy
 
 
@@ -27,7 +27,7 @@ def main():
         print(release.__version__)
         return
     elif args.command == "run":
-        search_app.main()
+        flask_app.main()
         return
     elif args.command == "deploy":
         deploy.main(args=args)

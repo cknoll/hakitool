@@ -10,8 +10,6 @@ from .search_engine import TextFileIndexer
 from . import util
 
 
-
-
 # simple storage for global data
 class Container:
     pass
@@ -33,7 +31,7 @@ def init(confpath="config.toml", test_mode=False):
     assert LOGLEVEL in ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL")
     loglevel = getattr(logging, LOGLEVEL)
 
-    c.logger = logging.getLogger("flabbs")
+    c.logger = logging.getLogger(APP_NAME)
 
     # disable debug messages from other loggers
     for k, v in logging.Logger.manager.loggerDict.items():
