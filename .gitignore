@@ -6,3 +6,5 @@ output
 
 file_index.pkl
 config.toml
+
+*egg-*

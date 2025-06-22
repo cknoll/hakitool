@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hakitool"
+version = "0.1.0"
+description = "podcast transcript search tool with web frontend"
+authors = [
+    {name = "Carsten Knoll", email = "firstname.lastname@posteo.de"},
+]
+requires-python = ">=3.11"
+keywords = ["search", "transcript"]
+
+
+[project.scripts]
+hakitool = "hakitool.cli:main"
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+version = {attr = "hakitool.__version__"}
