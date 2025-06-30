@@ -12,6 +12,7 @@ def main():
 
     subparsers = parser.add_subparsers(dest="command")
     run_parser = subparsers.add_parser("run", help="run the application")
+    download_parser = subparsers.add_parser("download", help="download transcripts from yt")
     if deploy.REQUIREMENTS_INSTALLED:
         deploy_parser = subparsers.add_parser("deploy", help="deploy the application", add_help=False)
         deploy.DeploymentManager.add_deployment_args(deploy_parser)
@@ -21,6 +22,10 @@ def main():
     # IPS()
     if args.version:
         print(release.__version__)
+        return
+    elif args.command == "download":
+        from . import download
+        download.main()
         return
     elif args.command == "run":
         flask_app.main()

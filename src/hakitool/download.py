@@ -87,7 +87,7 @@ def download_german_subtitles(video_url, existing_urls=None):
     """Download German subtitles for a single video."""
     if existing_urls and video_url in existing_urls:
         print(f"Skipping already downloaded video: {video_url}")
-        return
+        return "skipped"
 
     # Extract video ID from URL
     video_id = video_url.split('v=')[1].split('&')[0]
@@ -106,10 +106,6 @@ def download_german_subtitles(video_url, existing_urls=None):
     else:
         filename_prefix = slugified_title
         print("Warning: Could not fetch publish date, using title only")
-
-    api = YouTubeTranscriptApi()
-    q, = api.list(video_id)
-    q.fetch()
 
     fulltext_lines  = []
 
@@ -134,7 +130,7 @@ def download_german_subtitles(video_url, existing_urls=None):
             json.dump(result_dict, fp, ensure_ascii=False, indent=2)
 
         for snippet in result_dict["transcript_snippets"]:
-            fulltext_lines.append(f"{snippet["text"]}\n")
+            fulltext_lines.append(f"{snippet['text']}\n")
 
         with open(fulltext_fpath, 'w', encoding='utf-8') as fp:
             fp.writelines(fulltext_lines)
@@ -162,10 +158,12 @@ def main():
         video_urls = get_playlist_videos(playlist_url)
 
         #IPS()
-        for url in video_urls:
+        for idx, url in enumerate(video_urls):
             try:
-                download_german_subtitles(url, existing_urls)
-                time.sleep(10)  # Pause between downloads
+                print(f"{idx}:")
+                res = download_german_subtitles(url, existing_urls)
+                if res != "skipped":
+                    time.sleep(10)  # Pause between downloads
             except:
                 print("Problem with url", url)
     else:
